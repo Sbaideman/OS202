@@ -26,5 +26,5 @@ Le mieux est d'utiliser Anaconda :  https://www.anaconda.com/products/individual
 
 Dans le répertoire ```Exemples/MPI``` vous trouverez des examples MPI en Python. Testez si votre installation marche en tapant dans un terminal :
 ```sh
-mpiexec -np 2 python parallel_hello_world.py
+mpiexec -np 2 python Exemples/MPI/parallel_hello_world.py
 ```
