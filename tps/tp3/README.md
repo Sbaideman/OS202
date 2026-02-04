@@ -1,11 +1,24 @@
-# TD n°3 - parallélisation du Bucket Sort
+# TD3
+#### Tianze Xia
 
-*Ce TD peut être réalisé au choix, en C++ ou en Python*
+## 1. Parallélisation du Bucket Sort
+```bash
+# Exécution
+mpiexec -np 1 python bucket_sort.py
+...
+```
 
-Implémenter l'algorithme "bucket sort" tel que décrit sur les deux dernières planches du cours n°3 :
+| Nombre de Processus | Temps (s) | Speedup |
+|:---------:|:-----------------:|:---------:|
+|        1 |             6.47  |  1.00 |
+|        2 |             6.02 |  1.07 |
+|        4 |             4.51 |  1.43 |
+|        8 |             3.66 |  1.77 |
+|        16 |            3.85 |  1.68 |
 
-- le process 0 génère un tableau de nombres arbitraires,
-- il les dispatch aux autres process,
-- tous les process participent au tri en parallèle,
-- le tableau trié est rassemblé sur le process 0.
+**Analyse des résultats :**
+* **Gain limité :** Le speedup maximal atteint n'est que de 1,77 avec 8 processus, ce qui est loin de l'accélération linéaire idéale. Cela indique que l'algorithme est fortement limité par le surcoût des communications (notamment les opérations Scatter, Gather et surtout le All-to-all pour la redistribution des données).
+  
+* **Point de saturation :** On observe une dégradation des performances à 16 processus (3,85s contre 3,66s à 8 processus). À ce stade, le coût lié à la gestion d'un plus grand nombre de messages et à la synchronisation l'emporte sur le gain de calcul local.
 
+**Conclusion :** Pour cette taille de problème, le ratio calcul/communication n'est pas optimal pour une parallélisation massive. Le seuil de rentabilité se situe à 8 processus dans cet environnement.
